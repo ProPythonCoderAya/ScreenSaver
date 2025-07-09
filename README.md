@@ -32,13 +32,15 @@ If you want to contribute, provide feedback, or report bugs, feel free to open a
 
 ## Credits
 
-Built with ❤️ by Ayaan.  
-Powered by Python, macOS, and good vibes.
+Built by Ayaan.
+Powered by Python and pygame for the UI.
 
 ## Minimum Requirements
 
-- macOS 11.0 (Big Sur) or later
+- macOS 10.15 (Catalina) or later
 - Python 3.10+ (installer will download Python automatically if not found)
+
+> Works only for **macOS**, Windows and Linux support may come soon.
 
 ---
 
