@@ -209,3 +209,5 @@ __marimo__/
 .gitignore
 
 .DS_Store
+
+*.json

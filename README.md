@@ -24,9 +24,11 @@ ScreenSaver includes a built-in updater:
 
 ## Licensing
 
-ScreenSaver is currently distributed as a **closed-source** binary application.
+ScreenSaver is free software, licensed under the [GNU General Public License v3.0](./LICENSE).
 
-> Source code is not currently distributed. All rights reserved © 2025 Ayaan.
+> You are free to use, modify, and redistribute this software, as long as your changes are also licensed under the GPL.
+
+© 2025 Ayaan Banday
 
 If you want to contribute, provide feedback, or report bugs, feel free to open an issue or reach out on GitHub.
 
