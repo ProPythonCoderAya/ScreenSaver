@@ -76,6 +76,13 @@ def update(version):
 
         shutil.rmtree(src_dir)
 
+        shutil.rmtree(abspath("C/dist/"))
+
+        os.mkdir(abspath("C/dist"))
+
+        os.system(f""" clang -dynamiclib "{abspath("C/src/main.c")}" -framework CoreAudio -o "{abspath("C/dist/libaudioutil.dylib")}" """.strip())
+        os.system(f""" cp "{abspath("C/dist/libaudioutil.dylib")}" "{abspath("libaudioutil.dylib")}" """.strip())
+
         print("Update applied successfully!")
     except Exception as e:
         print(f"Failed to apply update: {e}")
@@ -106,7 +113,6 @@ def create_button(x, y, text, color, hover_color):
     )
 
 widget_timeout = create_textbox(200, 29, "3")
-widget_sleep = create_textbox(700, 29, "30")
 widget_save = create_button(100, 545, "Save", (0, 200, 100), (0, 230, 130))
 widget_runit = create_button(700, 545, "Run", (200, 100, 0), (230, 130, 0))
 widget_stopit = create_button(550, 545, "Stop", (200, 0, 0), (230, 50, 50))
@@ -129,7 +135,6 @@ if os.path.exists(config_path):
         with open(config_path, "r") as f:
             data = json.load(f)
             widget_timeout.text = str(data.get("timeout", 180) // 60)
-            widget_sleep.text = str(data.get("sleep", 30))
     except Exception as e:
         log(f"Failed to load config: {e}", level=1)
 
@@ -175,10 +180,7 @@ def launch_loop(timeout_val, sleep_val):
 
                 exit_code = process.wait()
 
-                if exit_code == 255:
-                    os.system("osascript -e 'tell application \"System Events\" to sleep'")
-                    break
-                elif exit_code != 0:
+                if exit_code != 0:
                     log("main.py exited with error, stopping loop.", level=3)
                     break
 
@@ -227,15 +229,11 @@ while run:
             update_widget.draw(WIN)
 
         time = widget_timeout.text
-        sleep_time = widget_sleep.text
 
         color = (0, 0, 0) if time.isnumeric() else (255, 0, 0)
         WIN.blit(font.render("Timeout (min):", True, color), (25, 25))
 
-        color = (0, 0, 0) if sleep_time.isnumeric() else (255, 0, 0)
-        WIN.blit(font.render("Time before sleep (sec):", True, color), (415, 25))
-
-        is_valid_input = time.isnumeric() and sleep_time.isnumeric()
+        is_valid_input = time.isnumeric()
 
         if not is_valid_input:
             widget_save.disable()
@@ -249,7 +247,7 @@ while run:
 
         if widget_save.is_clicked() and is_valid_input:
             with open(config_path, "w") as f:
-                json.dump({"timeout": int(time) * 60, "sleep": int(sleep_time)}, f, indent=4)
+                json.dump({"timeout": int(time) * 60}, f, indent=4)
             log("Saved configuration")
 
         if widget_runit.is_clicked() and is_valid_input and (loop_thread is None or not loop_thread.is_alive()):
@@ -257,7 +255,7 @@ while run:
             widget_runit.disable()
             widget_runit.change_text("Running...")
             widget_stopit.enable()
-            loop_thread = threading.Thread(target=launch_loop, args=(time, sleep_time), daemon=True)
+            loop_thread = threading.Thread(target=launch_loop, args=(time,), daemon=True)
             loop_thread.start()
 
         if widget_stopit.is_clicked() and process:

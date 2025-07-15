@@ -1,12 +1,6 @@
 import pygame
 import random
-import argparse
 pygame.init()
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-f", "--forever", action="store_true", help="Run forever")
-parser.add_argument("-t", "--time", type=int, help="Set the time limit before sleep", default=180)
-args = parser.parse_args()
 
 info = pygame.display.Info()
 WIDTH, HEIGHT = info.current_w, info.current_h
@@ -25,9 +19,7 @@ chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()
 cols = WIDTH // font_size
 
 speed = 1
-time = 0
 fps = 20
-sleep = args.time
 
 clock = pygame.time.Clock()
 running = True
@@ -57,18 +49,16 @@ for i in range(cols):
             rains.append(create_rain(y_try))
         attempts += 1
 
-while running and time // fps < sleep:
+while running:
     screen.fill(BLACK)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            time = -1
         if event.type == pygame.MOUSEMOTION or event.type == pygame.KEYDOWN:
             attempt += 1
             if attempt == 2:
                 running = False
-                time = -1
 
     for i in range(cols):
         rains = rain_columns[i]
@@ -112,13 +102,6 @@ while running and time // fps < sleep:
 
     pygame.display.flip()
     clock.tick(fps)
-    if args.forever:
-        time = 0
-    else:
-        time += 1
 
 pygame.mouse.set_visible(True)
 pygame.quit()
-
-if time != 0:
-    exit(-1)

@@ -79,18 +79,12 @@ class InactivityMonitor:
 if __name__ == "__main__":
     print("[DEBUG] Starting monitor")
     INACTIVITY_LIMIT = 3
-    SLEEP = "30"
     if len(sys.argv) > 1:
         if sys.argv[1].isnumeric():
             INACTIVITY_LIMIT = int(sys.argv[1])
-        if len(sys.argv) > 2:
-            if sys.argv[2].isnumeric():
-                SLEEP = sys.argv[2]
     FILE_TO_OPEN = os.path.join(os.path.dirname(sys.argv[0]), 'matrix.py')
-    monitor = InactivityMonitor(INACTIVITY_LIMIT, "Minutes", FILE_TO_OPEN, "-t", SLEEP)
+    monitor = InactivityMonitor(INACTIVITY_LIMIT, "Minutes", FILE_TO_OPEN)
     rc = monitor.run()
     if rc != 0:
-        if rc == 255:
-            exit(-1)
         print(f"[ERROR] matrix.py crashed with error code: {rc}")
     print("[DEBUG] Screen Saver executed")
