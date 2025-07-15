@@ -149,7 +149,7 @@ stop_requested = False
 is_running = False
 
 # --- Launch Logic ---
-def launch_loop(timeout_val):
+def launch_loop(timeout_val, sleep_val):
     global process, stop_requested, is_running
     is_running = True
     try:
@@ -157,7 +157,7 @@ def launch_loop(timeout_val):
             log("Launching main.py")
             try:
                 process = subprocess.Popen(
-                    [sys.executable, "main.py", timeout_val],
+                    [sys.executable, "main.py", timeout_val, sleep_val],
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                     text=True, bufsize=1, universal_newlines=True
                 )
