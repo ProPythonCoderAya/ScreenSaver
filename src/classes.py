@@ -206,15 +206,27 @@ class Alert(BasePoolObject):
         font_size = 30
         if self.icon is not None:
             self._rect.x -= 64
-            self._button1 = Button(self._rect.x + 148 + bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (220, 0, 0), (255, 0, 0),
-                                   (0, 0, 0), self.button_names[0], font=None, font_size=font_size)
-            self._button2 = Button(self._rect.right - 70 - bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (0, 220, 0), (0, 255, 0),
-                                   (0, 0, 0), self.button_names[1], font=None, font_size=font_size)
+            if self.button_names[0] == "":
+                self._button1 = Button(-100, -100, 0, 0, (0, 0, 0), (0, 0, 0), (0, 0, 0), "")
+            else:
+                self._button1 = Button(self._rect.x + 148 + bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (220, 0, 0), (255, 0, 0),
+                                    (0, 0, 0), self.button_names[0], font=None, font_size=font_size)
+            if self.button_names[1] == "":
+                self._button2 = Button(-100, -100, 0, 0, (0, 0, 0), (0, 0, 0), (0, 0, 0), "")
+            else:
+                self._button2 = Button(self._rect.right - 70 - bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (0, 220, 0), (0, 255, 0),
+                                    (0, 0, 0), self.button_names[1], font=None, font_size=font_size)
         else:
-            self._button1 = Button(self._rect.x + 10 + bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (220, 0, 0), (255, 0, 0),
-                                   (0, 0, 0), self.button_names[0], font=None, font_size=font_size)
-            self._button2 = Button(self._rect.right - 70 - bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (0, 220, 0), (0, 255, 0),
-                                   (0, 0, 0), self.button_names[1], font=None, font_size=font_size)
+            if button_names[0] == "":
+                self._button1 = Button(-100, -100, 0, 0, (0, 0, 0), (0, 0, 0), (0, 0, 0), "")
+            else:
+                self._button1 = Button(self._rect.x + 10 + bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (220, 0, 0), (255, 0, 0),
+                                       (0, 0, 0), self.button_names[0], font=None, font_size=font_size)
+            if self.button_names[1] == "":
+                self._button2 = Button(-100, -100, 0, 0, (0, 0, 0), (0, 0, 0), (0, 0, 0), "")
+            else:
+                self._button2 = Button(self._rect.right - 70 - bw / 2, self._rect.bottom - 20 - bh / 2, bw, bh, (0, 220, 0), (0, 255, 0),
+                                       (0, 0, 0), self.button_names[1], font=None, font_size=font_size)
         self.pool = ObjectPool()
         self.pool.add(self._button1)
         self.pool.add(self._button2)

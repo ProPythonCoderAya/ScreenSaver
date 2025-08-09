@@ -28,7 +28,10 @@ class UpdateChecker:
 
     def __fetch(self):
         """ Fetches the remote version file """
-        response = requests.get(self.url)
+        try:
+            response = requests.get(self.url)
+        except requests.exceptions.ConnectionError:
+            return -1
         if response.status_code == 200:
             return response.json()
         else:
@@ -55,9 +58,12 @@ class UpdateChecker:
             json.dump({"version": version}, f, indent=4)
         return version
 
-    def check(self) -> tuple[bool, str, str]:
+    def check(self) -> tuple[bool, str, str] | int:
         local_version = self.__local()
-        remote_version = self.__fetch()["version"]
+        remote_version = self.__fetch()
+        if remote_version == -1:
+            return -1
+        remote_version = remote_version["version"]
 
         return local_version != remote_version, local_version, remote_version
 

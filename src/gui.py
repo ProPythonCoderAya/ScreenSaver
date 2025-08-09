@@ -89,7 +89,11 @@ def update(version):
         return 1
     return 0
 
-update_available, _, version = updater.check()
+result = updater.check()
+if result == -1:
+    update_available, _, version = False, "", "err"
+else:
+    update_available, _, version = result
 
 # --- Logging ---
 def log(text: str, level: Literal[0, 1, 2] = 0):
@@ -119,7 +123,11 @@ widget_stopit = create_button(550, 545, "Stop", (200, 0, 0), (230, 50, 50))
 if update_available:
     update_widget = Alert(500, 200, "Update available!", "There is an update available! Do you want to install it?", icon="icon.png", button_names=["No", "Yes"])
 else:
-    update_widget = None
+    if version == "err":
+        update_widget = Alert(500, 200, "Uh oh!", "Do you have internet? I need internet to check for updates.",
+                              icon="warning.svg", button_names=["", "Ok"])
+    else:
+        update_widget = None
 
 # --- Object Pool ---
 pool = ObjectPool()
