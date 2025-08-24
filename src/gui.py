@@ -189,14 +189,16 @@ def launch_loop(timeout_val):
                 exit_code = process.wait()
 
                 if exit_code != 0:
+                    print(process.stderr)
+                    print(process.stdout)
                     log("main.py exited with error, stopping loop.", level=3)
-                    break
+                    return 1
 
                 log("main.py completed, restarting.", level=2)
 
             except Exception as e:
                 log(f"Failed to start process: {e}", level=3)
-                break
+                return 1
 
     finally:
         process = None
@@ -265,7 +267,7 @@ while run:
             widget_stopit.enable()
             loop_thread = threading.Thread(target=launch_loop, args=(time,), daemon=True)
             loop_thread.start()
-
+            
         if widget_stopit.is_clicked() and process:
             log("Stop button clicked")
             stop_requested = True
